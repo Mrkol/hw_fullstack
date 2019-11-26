@@ -1,5 +1,6 @@
 import { put, takeEvery, all, select, take, call } from 'redux-saga/effects'
 import { pipe } from 'fp-ts/es6/pipeable'
+import { flow } from 'fp-ts/es6/function'
 import { Optional } from 'monocle-ts'
 
 import * as Actions from './boardActions'
@@ -29,7 +30,7 @@ function parallel<T>(saga1: (arg0: Actions.Action<T>) => any,
 }
 
 function fetch<T extends object>(from: string,
-	resultActionType: Actions.ActionType, dependencySelector?: BooleanSelector) {
+	resultActionType: Actions.ActionType, dependencySelector?: (arg0: T) => BooleanSelector) {
 
 	return function*(action: Actions.Action<T>) {
 		const json = yield axios.get(from + '?' +
@@ -39,7 +40,7 @@ function fetch<T extends object>(from: string,
 			.then(resp => resp.data)
 
 		if (!!dependencySelector) {
-			yield call(waitFor, dependencySelector)
+			yield call(waitFor, dependencySelector(action.payload))
 		}
 
 		yield put({type: resultActionType, payload: {...action.payload, response: json}})
@@ -64,15 +65,15 @@ const fetchBoardsOnce = fetchOnce(Ls.boards, fetchBoards)
 
 const fetchThreads =
 	fetch<Actions.FetchThreadsPayload>('/api/getBoardThreads',
-		Actions.ActionType.ThreadsFetched, optToBoolSelector(Ls.boards()))
+		Actions.ActionType.ThreadsFetched, flow(Ls.boards, optToBoolSelector))
 
 const fetchThreadsOnce = parallel(fetchBoardsOnce, fetchOnce(Ls.threads, fetchThreads))
 
 const fetchThread =
 	fetch<Actions.FetchThreadPayload>('/api/getThreadMessages',
-		Actions.ActionType.ThreadFetched, optToBoolSelector(Ls.boards()))
+		Actions.ActionType.ThreadFetched, flow(Ls.threads, optToBoolSelector))
 
-const fetchThreadOnce = parallel(fetchBoardsOnce, fetchOnce(Ls.thread, fetchThread))
+const fetchThreadOnce = parallel(fetchThreadsOnce, fetchOnce(Ls.thread, fetchThread))
 
 
 function* postFormSubmit(action: Actions.Action<Actions.PostFormSubmitPayload>) {

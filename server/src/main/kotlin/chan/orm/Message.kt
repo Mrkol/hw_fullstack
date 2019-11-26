@@ -20,6 +20,7 @@ data class Message(
 
 	val number: Long = board.messageCount,
 	val author: String = "",
+	@Column(columnDefinition="TEXT")
 	val text: String,
 	val date: LocalDateTime = LocalDateTime.now()
 )

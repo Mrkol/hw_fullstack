@@ -22,11 +22,7 @@ class BoardController(
 		boardService.boardRepository.save(
 			Board(shortName = "b",
 			name = "Раздел B",
-			description = "Загадоный раздел"))
-		boardService.messageRepository.save(
-			Message(
-			board = boardA,
-			text = "Раз два раз два три"))
+			description = "Загадочный раздел"))
 	}
 
 	@PostMapping("/postMessage")

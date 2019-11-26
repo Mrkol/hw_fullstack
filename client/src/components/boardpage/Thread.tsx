@@ -20,10 +20,11 @@ const ThreadImpl =
 		preview: O.Option<number[]>,
 		dispatch: Dispatch}) => {
 
+	const previewLoaded = O.isNone(preview)
 	React.useEffect(() => {
 		dispatch({type: Actions.ActionType.FetchThreadOnce,
 			payload: {board: boardShortName, thread: oppost} as Actions.FetchThreadPayload})
-	}, [boardShortName, oppost, dispatch, O.isNone(preview)])
+	}, [boardShortName, oppost, previewLoaded, dispatch])
 
 	if (O.isNone(preview)) {
 		return <div/>

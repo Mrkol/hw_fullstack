@@ -1,0 +1,23 @@
+.wrapper {
+}
+
+.top {
+	margin-bottom: 5px;
+}
+
+.author {
+	width: calc(100% - 2px);
+}
+
+.text {
+	min-width: 200px;
+	min-height: 5em;
+}
+
+.send {
+	float: right;
+}
+
+.bottom {
+	width: 100%;
+}

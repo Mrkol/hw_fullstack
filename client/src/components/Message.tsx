@@ -3,6 +3,7 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import * as O from 'fp-ts/es6/Option'
 import { pipe } from 'fp-ts/es6/pipeable'
+import { Link } from 'react-router-dom'
 
 import * as State from '../state/MainState'
 import { mapL } from '../util'
@@ -12,8 +13,9 @@ function BodyProcessor(text: String) {
 	return text.split('\n').map((item, key) => <span key={key}>{item}<br/></span>);
 }
 
-const MessageImpl = ({entityOpt, isOppost, dispatch}:
-		{entityOpt: O.Option<State.Message>, isOppost: boolean, dispatch: Dispatch}) => {
+const MessageImpl = ({entityOpt, isOppost, board, dispatch}:
+		{entityOpt: O.Option<State.Message>, isOppost: boolean,
+			board: string, dispatch: Dispatch}) => {
 
 	if (O.isNone(entityOpt)) {
 		return <div/>
@@ -22,7 +24,15 @@ const MessageImpl = ({entityOpt, isOppost, dispatch}:
 	return (
 		<div className={isOppost ? 'oppost' : 'message'}>
 			<div className='messageHeader'>
-				<span className='id'>№{entity.number}</span>
+				{ isOppost ?
+				<Link to={`/${board}/${entity.number}`} className='id'>
+					№{entity.number}
+				</Link>
+				:
+				<span className='id'>
+					№{entity.number}
+				</span>
+				}
 				<span className='date'>{entity.date.toLocaleString()}</span>
 				<span className='name'>{entity.author}</span>
 			</div>
@@ -50,7 +60,8 @@ const mapStateToProps = ({board}: {board: State.MainState}, ownProps: OwnProps) 
 			O.map(mapL<number, State.Message>(ownProps.number).getOption),
 			O.flatten
 		),
-		isOppost: ownProps.isOppost === undefined ? false : ownProps.isOppost
+		isOppost: ownProps.isOppost === undefined ? false : ownProps.isOppost,
+		board: ownProps.board
 	})
 }
 

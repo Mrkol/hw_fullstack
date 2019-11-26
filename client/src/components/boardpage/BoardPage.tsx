@@ -6,13 +6,13 @@ import * as O from 'fp-ts/es6/Option'
 import * as A from 'fp-ts/es6/Array'
 import { Ord, ordNumber } from 'fp-ts/es6/Ord'
 import { pipe } from 'fp-ts/es6/pipeable'
-import { monoidAny, fold } from 'fp-ts/es6/Monoid'
 
 import * as State from '../../state/MainState'
 import * as Actions from '../../state/boardActions'
 import { mapL } from '../../util'
 import Thread from './Thread'
 import PostForm from '../PostForm'
+import BoardHeader from '../BoardHeader'
 
 import './BoardPage.css'
 
@@ -36,18 +36,11 @@ const BoardPageImpl =
 
 	return (
 		<div>
-			<div className='header'>
-				<div className='boardTitle'>
-					<div className='title'>
-						<span>{board.value.name}</span>
-					</div>
-					<div className='description'>
-						<span>{board.value.description}</span>
-					</div>
+			<BoardHeader board={board.value}/>
+			<div className='postFormWrapper'>
+				<div className='postForm'>
+					<PostForm board={board.value.shortName}/>
 				</div>
-			</div>
-			<div>
-				<PostForm board={board.value.shortName}/>
 			</div>
 			<div>
 			{threads.value.map((id: number) =>

@@ -12,7 +12,7 @@ const App = ({store, history}: any) => (
 	<Provider store={store}>
 		<ConnectedRouter history={history}>
 			<Switch>
-				<Route path="/:board/:id" component={ThreadPage}/>
+				<Route path="/:board/:thread" component={ThreadPage}/>
 				<Route path="/:board" component={BoardPage}/>
 				<Route path="/" component={StartPage}/>
 			</Switch>

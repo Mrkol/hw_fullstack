@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import * as State from '../state/MainState'
 import * as Actions from '../state/boardActions'
 
+import './PostForm.css'
 
 const PostFormImpl = ({message, board, thread, update, submit}:
 	{message: State.Message, board: string, thread?: number,
@@ -12,17 +13,17 @@ const PostFormImpl = ({message, board, thread, update, submit}:
 		submit: (arg0: State.Message, arg1: string, arg2?: number) => void}) => {
 
 	return (
-		<div>
-			<div>
-				<input type='text' placeholder='Имя'
+		<div className='wrapper'>
+			<div className='top'>
+				<input className='author' type='text' placeholder='Имя'
 					onBlur={e => update({...message, author: e.target.value})}/>
 			</div>
 			<div>
-				<textarea placeholder='Комментарий'
+				<textarea className='text' placeholder='Комментарий'
 					onBlur={e => update({...message, text: e.target.value})}/>
 			</div>
-			<div>
-				<button onClick={e => submit(message, board, thread)}>Отправить</button>
+			<div className='bottom'>
+				<button className='send' onClick={e => submit(message, board, thread)}>Отправить</button>
 			</div>
 		</div>
 	)
