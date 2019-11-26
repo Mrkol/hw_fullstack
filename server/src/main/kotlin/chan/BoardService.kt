@@ -40,19 +40,19 @@ class BoardService(
 	fun getMessage(board: Board, number: Long): Message {
 		val message = messageRepository.getByBoardAndNumber(board, number)
 		if (message == null) {
-			throw MessageNotFound(number);
+			throw MessageNotFound(number)
 		}
-		return message;
+		return message
 	}
 
 	@Transactional
-	fun postMessage(text: String, author: String, threadNumber: Long?, boardShortName: String) {
+	fun postMessage(message: Message, boardShortName: String, threadNumber: Long? = null) {
 		val board = getBoardAndBumpMessageCount(boardShortName)
-		val message = Message(board = board,
+		val messageNew = Message(board = board,
 			parent = threadNumber?.let { getMessage(board, it) },
-			author = author,
-			text = text)
-		messageRepository.save(message)
+			author = message.author,
+			text = message.text)
+		messageRepository.save(messageNew)
 	}
 
 	@Transactional

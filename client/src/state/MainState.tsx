@@ -1,19 +1,18 @@
 import { Option } from 'fp-ts/es6/Option'
 import { Lens, Optional } from 'monocle-ts'
 
-import Board from './Board'
-import Message from './Message'
-
 
 export interface MainState {
 	boards: Option<Map<string, BoardState>>
 	loading: boolean
+	postFormMessage: Message
 }
 export const loadingL = Lens.fromProp<MainState>()('loading')
 // This ignores "none"
 export const boardsO = Optional.fromOptionProp<MainState>()('boards')
 // This allows to change "none"
 export const boardsL = Lens.fromProp<MainState>()('boards')
+export const postFormMessageL = Lens.fromProp<MainState>()('postFormMessage')
 
 export interface BoardState {
 	board: Board
@@ -27,5 +26,22 @@ export const messagesL = Lens.fromProp<BoardState>()('messages')
 
 export interface ThreadState {
 	oppost: number
-	messages: Option<number[]>
+	replies: Option<Set<number>>
 }
+export const repliesO = Optional.fromOptionProp<ThreadState>()('replies')
+export const repliesL = Lens.fromProp<ThreadState>()('replies')
+
+export interface Message {
+	number: number
+	author: string
+	text: string
+	date: Date
+}
+
+export interface Board {
+	id: number;
+	shortName: string;
+	name: string;
+	description: string;
+}
+

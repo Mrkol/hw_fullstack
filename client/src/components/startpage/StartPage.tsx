@@ -7,15 +7,16 @@ import { ordString } from 'fp-ts/es6/Ord'
 import { pipe } from 'fp-ts/es6/pipeable'
 import * as O from 'fp-ts/es6/Option'
 
-import * as State from '../state/MainState'
-import Board from '../state/Board'
-import * as Actions from '../state/boardActions'
+import * as State from '../../state/MainState'
+import * as Actions from '../../state/boardActions'
 import './StartPage.css'
 
 
-const StartPageImpl = ({boardList, dispatch}: {boardList: O.Option<Board[]>, dispatch: Dispatch}) => {
+const StartPageImpl = ({boardList, dispatch}:
+		{boardList: O.Option<State.Board[]>, dispatch: Dispatch}) => {
+
 	React.useEffect(() => {
-		dispatch({type: Actions.ActionType.FetchBoards, payload: undefined})
+		dispatch({type: Actions.ActionType.FetchBoards, payload: {}})
 	}, [dispatch]);
 
 	if (O.isNone(boardList)) {
@@ -25,7 +26,7 @@ const StartPageImpl = ({boardList, dispatch}: {boardList: O.Option<Board[]>, dis
 	return (
 		<div className='page'>
 			<div className='boardList'>
-				{boardList.value.map((board: Board) =>
+				{boardList.value.map((board: State.Board) =>
 					<Link to={board.shortName} key={board.id} className='boardLink'>
 						/{board.shortName}/ {board.name} -- {board.description}
 					</Link>

@@ -1,0 +1,18 @@
+.boardTitle {
+	margin: auto;
+	text-align: center;
+}
+
+.title {
+	font-size: 30px;
+}
+
+.description {
+	font-size: 20px;
+}
+
+.header {
+	display: flex;
+	width: 100%;
+	height: 100px;
+}

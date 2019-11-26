@@ -13,10 +13,15 @@ export function mapL<K, V>(key: K): Optional<Map<K, V>, V> {
 }
 
 export const mapMerge =
-	<K, V> (map1: Map<K, V>) =>
+	<K, V>(map1: Map<K, V>) =>
 		(map2: Map<K, V>) => new Map([...map2, ...map1])
 
 export const optionMapMerge =
 	<K, V>(map1: Map<K, V>) =>
 		(map2: O.Option<Map<K, V>>) =>
 			O.isNone(map2) ? map1 : new Map([...map2.value, ...map1])
+
+export const optionSetMerge =
+	<V,>(set1: Set<V>) =>
+		(set2: O.Option<Set<V>>) =>
+			O.isNone(set2) ? set1 : new Set([...set2.value, ...set1])

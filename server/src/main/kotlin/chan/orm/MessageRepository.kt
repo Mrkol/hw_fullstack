@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface MessageRepository: CrudRepository<Message, Long> {
 	fun getByBoardAndParent(board: Board, parent: Message?): List<Message>
-	fun getByBoardAndNumber(board: Board, number: Long): Message
+	fun getByBoardAndNumber(board: Board, number: Long): Message?
 	fun getById(id: Long): Message?
 }

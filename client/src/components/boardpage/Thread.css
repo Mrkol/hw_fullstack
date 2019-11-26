@@ -1,0 +1,9 @@
+.previewBlock {
+	margin-left: 15px;
+}
+
+.separator {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(56, 56, 56), rgba(0, 0, 0, 0));
+	height: 2px;
+	margin-bottom: 8px;
+}

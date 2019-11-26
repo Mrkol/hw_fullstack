@@ -3,9 +3,9 @@ import { Route, Switch } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
 
-import ThreadPage from './ThreadPage'
-import BoardPage from './BoardPage'
-import StartPage from './StartPage'
+import ThreadPage from './threadpage/ThreadPage'
+import BoardPage from './boardpage/BoardPage'
+import StartPage from './startpage/StartPage'
 
 
 const App = ({store, history}: any) => (

@@ -33,19 +33,17 @@ class BoardController(
 	fun postMessage(
 		@RequestParam("board") board: String,
 		@RequestParam("thread") thread: Long,
-		@RequestParam("author") author: String?,
-		@RequestBody text: String
+		@RequestBody message: String
 	) {
-		boardService.postMessage(text, author ?: "Anonymous", thread, board)
+		boardService.postMessage(jsonMapper.readValue(message, Message::class.java), board, thread)
 	}
 
 	@PostMapping("/postThread")
 	fun postThread(
 		@RequestParam("board") board: String,
-		@RequestParam("author") author: String?,
-		@RequestBody text: String
+		@RequestBody message: String
 	) {
-		boardService.postMessage(text, author ?: "Anonymous", null, board)
+		boardService.postMessage(jsonMapper.readValue(message, Message::class.java), board)
 	}
 
 	@GetMapping("/getThreadMessages")

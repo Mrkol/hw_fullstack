@@ -12,21 +12,22 @@
 	max-width: 75%;
 }
 
+.oppost {
+	padding: 10px;
+	padding-left: 20px;
+}
+
 .messageHeader {
+	color: rgb(135, 150, 173);
 }
 
 .messageBody {
-
+	padding: 10px;
+	padding-left: 15px;
 }
 
 .messageFooter {
 
-}
-
-.separator {
-	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(56, 56, 56), rgba(0, 0, 0, 0));
-	height: 2px;
-	margin-bottom: 8px;
 }
 
 .reply {
@@ -34,7 +35,11 @@
 }
 
 .id {
-	margin-right: 5px;
+	margin-right: 10px;
+}
+
+.date {
+	margin-right: 10px;
 }
 
 .name {
