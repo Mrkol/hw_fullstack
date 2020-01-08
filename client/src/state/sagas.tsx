@@ -14,6 +14,16 @@ type BooleanSelector = (arg0: RootState) => boolean
 const optToBoolSelector = <V,>(opt: Optional<M.MainState, V>) =>
 	pipe(opt, Ls.focusOptionalFromRoot, Ls.isSome)
 
+function readFileRaw(file: Blob) {
+	return new Promise<ArrayBuffer>((resolve, reject) => {
+		const reader  = new FileReader();
+		reader.onload = () => resolve(reader.result as ArrayBuffer)
+		reader.onerror = reject
+		reader.readAsArrayBuffer(file)
+	})
+}
+
+
 function* waitFor(selector: BooleanSelector) {
   while (true) {
     if (yield select(selector)) return;
@@ -77,7 +87,23 @@ const fetchThreadOnce = parallel(fetchThreadsOnce, fetchOnce(Ls.thread, fetchThr
 
 
 function* postFormSubmit(action: Actions.Action<Actions.PostFormSubmitPayload>) {
-	const msg = action.payload.message
+	var msg = action.payload.message
+
+	if (msg.media instanceof FileList) {
+		var uuids: string[] = []
+		for (let file of msg.media) {
+			let content = yield call(readFileRaw, file)
+
+			let result = yield axios.post(`/api/postContent`, content, {
+				headers:{
+					'Content-Type': 'application/octet-stream'
+				}
+			})
+			uuids.push(result.data)
+		}
+		msg.media = uuids
+	}
+
 	if (!action.payload.thread) {
 		yield axios.post(`/api/postThread?board=${action.payload.board}`, msg)
 

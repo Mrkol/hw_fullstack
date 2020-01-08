@@ -2,9 +2,14 @@ package chan
 
 import org.springframework.web.bind.annotation.*
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.util.UUID
+import java.io.InputStream
+
 import chan.BoardService
 import chan.orm.Board
 import chan.orm.Message
+import chan.validateMessage
+import java.util.Base64;
 
 
 @RestController
@@ -15,10 +20,9 @@ class BoardController(
 	private val jsonMapper = ObjectMapper();
 
 	init {
-		var boardA = Board(shortName = "a",
+		boardService.boardRepository.save(Board(shortName = "a",
 			name = "Раздел А",
-			description = "Не очень загадочный раздел")
-		boardA = boardService.boardRepository.save(boardA)
+			description = "Не очень загадочный раздел"))
 		boardService.boardRepository.save(
 			Board(shortName = "b",
 			name = "Раздел B",
@@ -31,7 +35,9 @@ class BoardController(
 		@RequestParam("thread") thread: Long,
 		@RequestBody message: String
 	) {
-		boardService.postMessage(jsonMapper.readValue(message, Message::class.java), board, thread)
+		val messageObj = jsonMapper.readValue(message, Message::class.java)
+		validateMessage(messageObj)
+		boardService.postMessage(messageObj, board, thread)
 	}
 
 	@PostMapping("/postThread")
@@ -39,7 +45,9 @@ class BoardController(
 		@RequestParam("board") board: String,
 		@RequestBody message: String
 	) {
-		boardService.postMessage(jsonMapper.readValue(message, Message::class.java), board)
+		val messageObj = jsonMapper.readValue(message, Message::class.java)
+		validateMessage(messageObj)
+		boardService.postMessage(messageObj, board)
 	}
 
 	@GetMapping("/getThreadMessages")
@@ -60,5 +68,15 @@ class BoardController(
 	@GetMapping("/getBoards")
 	fun getBoards(): String {
 		return jsonMapper.writeValueAsString(boardService.boardRepository.findAll())
+	}
+
+	@PostMapping("/postContent")
+	fun postContent(@RequestBody data: ByteArray): String {
+		return boardService.postContent(data).toString()
+	}
+
+	@GetMapping("/getContent")
+	fun getContent(@RequestParam("uuid") uuid: UUID): ByteArray {
+		return boardService.getContent(uuid)
 	}
 }

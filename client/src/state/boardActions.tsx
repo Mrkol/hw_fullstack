@@ -14,7 +14,10 @@ export enum ActionType {
 	ThreadFetched = 'THREAD_FETCHED',
 
 	PostFormUpdate = 'POST_FORM_UPDATE',
-	PostFormSubmit = 'POST_FORM_SUBMIT'
+	PostFormSubmit = 'POST_FORM_SUBMIT',
+
+	ViewerContentUpdate = 'VIEWER_CONTENT_UPDATE',
+	ViewerUpdate = 'VIEWER_UPDATE'
 }
 
 export interface Action<T> {

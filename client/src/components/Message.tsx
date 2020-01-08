@@ -6,6 +6,7 @@ import { pipe } from 'fp-ts/es6/pipeable'
 import { Link } from 'react-router-dom'
 
 import * as State from '../state/MainState'
+import * as Actions from '../state/boardActions'
 import { mapL } from '../util'
 import './Message.css'
 
@@ -13,9 +14,9 @@ function BodyProcessor(text: String) {
 	return text.split('\n').map((item, key) => <span key={key}>{item}<br/></span>);
 }
 
-const MessageImpl = ({entityOpt, isOppost, board, dispatch}:
+const MessageImpl = ({entityOpt, isOppost, board, open}:
 		{entityOpt: O.Option<State.Message>, isOppost: boolean,
-			board: string, dispatch: Dispatch}) => {
+			board: string, open: (arg0: string) => void}) => {
 
 	if (O.isNone(entityOpt)) {
 		return <div/>
@@ -34,10 +35,29 @@ const MessageImpl = ({entityOpt, isOppost, board, dispatch}:
 				</span>
 				}
 				<span className='date'>{entity.date.toLocaleString()}</span>
-				<span className='name'>{entity.author}</span>
+				{ !!entity.author && <span className='name'>{entity.author}</span> }
+				{ !!entity.tripcode && <span className='tripcode'>{entity.tripcode}</span> }
 			</div>
 			<div className='messageBody'>
-				<span>
+				{
+					(entity.media instanceof Array) ?
+					<div className='mediaContent'>
+						{ // TODO: replace img with proper content tag
+							entity.media.map(uuid =>
+								<div className='mediaWrap' key={`${uuid}`}
+									onClick={e => open(uuid)}>
+									<img className='mediaImpl' src={`/api/getContent?uuid=${uuid}`}/>
+								</div>
+							)
+						}
+					</div>
+					:
+					[]
+				}
+				{
+					entity.media.length > 1 ? <br className='forceBreak'/> : []
+				}
+				<span className='messageBodySpan'>
 					{BodyProcessor(entity.text)}
 				</span>
 			</div>
@@ -65,6 +85,10 @@ const mapStateToProps = ({board}: {board: State.MainState}, ownProps: OwnProps) 
 	})
 }
 
-const Message = connect(mapStateToProps)(MessageImpl)
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+	open: (uuid: string) => dispatch({type: Actions.ActionType.ViewerContentUpdate, payload: uuid})
+})
+
+const Message = connect(mapStateToProps, mapDispatchToProps)(MessageImpl)
 
 export default Message

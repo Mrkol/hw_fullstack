@@ -13,6 +13,7 @@ import { mapL } from '../../util'
 import Thread from './Thread'
 import PostForm from '../PostForm'
 import BoardHeader from '../BoardHeader'
+import ContentViewer from '../ContentViewer'
 
 import './BoardPage.css'
 
@@ -47,6 +48,7 @@ const BoardPageImpl =
 				<Thread key={id} board={board.value.shortName} number={id}/>
 			)}
 			</div>
+			<ContentViewer/>
 		</div>
 	)
 }
@@ -70,18 +72,11 @@ const mapStateToProps = ({board}: {board: State.MainState}, ownProps: OwnProps) 
 				boardLens.getOption(board),
 				O.map((s: State.BoardState) => s.threads),
 				O.flatten,
-				O.map((map: Map<number, State.ThreadState>) => Array.from(map.keys())),
-				O.map(arr => {
-					let opt = boardLens.composeLens(State.messagesL).getOption(board)
-					if (O.isNone(opt)) { return O.none }
-					return O.some({ids: arr, messages: opt.value})
-				}),
-				O.flatten,
-				O.map(({ids, messages}) => ids.map(id => messages.get(id) as any as State.Message)),
+				O.map((map: Map<number, State.ThreadState>) => Array.from(map.values())),
 				O.map(A.sort({
-					compare: (x, y) => -ordNumber.compare(x.date.getTime(), y.date.getTime())
-				} as Ord<State.Message>)),
-				O.map(A.map(message => message.number))
+					compare: (x, y) => -ordNumber.compare(x.latestReply, y.latestReply)
+				} as Ord<State.ThreadState>)),
+				O.map(A.map(thread => thread.oppost))
 			)
 	})
 }

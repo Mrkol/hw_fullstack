@@ -10,6 +10,7 @@ import Message from '../Message'
 import { mapL } from '../../util'
 import BoardHeader from '../BoardHeader'
 import PostForm from '../PostForm'
+import ContentViewer from '../ContentViewer'
 
 import './ThreadPage.css'
 
@@ -45,6 +46,7 @@ const ThreadPageImpl = ({boardShortName, threadNumber, board, replies, dispatch}
 				{Array.from(replies.value).map(id =>
 					<Message board={boardShortName} number={id} key={id}/>)}
 			</div>
+			<ContentViewer/>
 		</div>
 	)
 }

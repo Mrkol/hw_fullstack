@@ -2,22 +2,50 @@
 }
 
 .top {
-	margin-bottom: 5px;
+	padding: 5px;
+	padding-bottom: 0;
+	display: flex;
+	width: auto;
+}
+
+.middle {
+	width: auto;
+	padding: 5px;
+	height: auto;
 }
 
 .author {
-	width: calc(100% - 2px);
+	width: auto;
+	margin-right: 5px;
+	padding-left: 3px;
+}
+
+.tripcode {
+	width: auto;
+	padding-left: 3px;
 }
 
 .text {
 	min-width: 200px;
-	min-height: 5em;
+	min-height: 10em;
+	width: 100%;
+	height: auto;
+	resize: none;
+	box-sizing: border-box;
 }
 
 .send {
 	float: right;
+	height: 21px;
+}
+
+.upload {
+	float: left;
+	height: 20px;
 }
 
 .bottom {
-	width: 100%;
+	width: auto;
+	padding: 5px;
+	padding-top: 0;
 }
