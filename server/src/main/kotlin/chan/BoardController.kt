@@ -9,7 +9,7 @@ import chan.BoardService
 import chan.orm.Board
 import chan.orm.Message
 import chan.validateMessage
-import java.util.Base64;
+import java.util.Base64
 
 
 @RestController

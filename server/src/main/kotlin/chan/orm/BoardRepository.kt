@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 interface BoardRepository: CrudRepository<Board, Long> {
 	fun getById(id: Long): Board?
 	fun getByShortName(shortName: String): Board?
+	fun existsByShortName(shortName: String): Boolean
 }

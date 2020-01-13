@@ -20,6 +20,8 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.2.1.RELEASE")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.0")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.security:spring-security-test")
 
 	compile("org.springframework.boot:spring-boot-starter-web:2.2.1.RELEASE")
 	compile("org.jetbrains.kotlin:kotlin-reflect")

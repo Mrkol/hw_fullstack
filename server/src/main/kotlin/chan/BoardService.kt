@@ -50,6 +50,23 @@ class BoardService(
 	}
 
 	@Transactional
+	fun createBoard(name: String, shortName: String, description: String) {
+		val board = Board(shortName = shortName, name = name, description = description)
+
+		if (boardRepository.existsByShortName(shortName)) {
+			return
+		}
+
+		boardRepository.save(board)
+	}
+
+	@Transactional
+	fun deleteBoard(shortName: String) {
+		val board = getBoard(shortName)
+		boardRepository.delete(board)
+	}
+
+	@Transactional
 	fun postMessage(message: Message, boardShortName: String, threadNumber: Long? = null) {
 		val board = getBoardAndBumpMessageCount(boardShortName)
 
@@ -74,7 +91,14 @@ class BoardService(
 		// TODO: add replies to all cited messages
 		var thread = getMessage(board, threadNumber)
 		thread.replies.add(messageNew.number)
-		thread = messageRepository.save(thread)
+		messageRepository.save(thread)
+	}
+
+	@Transactional
+	fun deleteMessage(boardShortName: String, number: Long) {
+		val board = getBoard(boardShortName)
+
+		messageRepository.deleteByBoardAndNumber(board, number)
 	}
 
 	fun postContent(image: ByteArray): UUID {
